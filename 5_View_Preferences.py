@@ -1,0 +1,16 @@
+import streamlit as st
+import pandas as pd
+
+st.title("🗂️ View Staff Preferences")
+
+df = pd.DataFrame({
+    "Staff ID": ["CS101", "CC212"],
+    "Name": ["Dr. Kumar", "Ms. Anita"],
+    "Pref1": ["Loyola", "MCC"],
+    "Pref2": ["MCC", "Loyola"],
+    "Pref3": ["Presidency", "-"]
+})
+
+st.dataframe(df)
+
+st.download_button("⬇️ Export Preferences", df.to_csv(), "preferences.csv")
