@@ -29,7 +29,7 @@ with col1:
         if admin_user == "admin" and admin_pass == "admin123":
             st.session_state.role = "admin"
             st.success("Logged in as Admin.")
-            st.experimental_rerun()
+            st.experimental_run()
         else:
             st.error("Invalid admin login")
 
