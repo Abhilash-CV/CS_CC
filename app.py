@@ -46,7 +46,7 @@ with col2:
         if staff_id.strip() != "" and staff_pass.strip() != "":
             st.session_state.role = "staff"
             st.success("Logged in as Staff.")
-            st.experimental_rerun()
+            st.experimental_run()
         else:
             st.error("Invalid staff login")
 
