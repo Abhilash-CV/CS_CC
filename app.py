@@ -29,7 +29,7 @@ with col1:
         if admin_user == "admin" and admin_pass == "admin123":
             st.session_state.role = "admin"
             st.success("Logged in as Admin.")
-            st.experimental_run()
+            st.rerun()
         else:
             st.error("Invalid admin login")
 
@@ -46,7 +46,7 @@ with col2:
         if staff_id.strip() != "" and staff_pass.strip() != "":
             st.session_state.role = "staff"
             st.success("Logged in as Staff.")
-            st.experimental_run()
+            st.rerun()
         else:
             st.error("Invalid staff login")
 
