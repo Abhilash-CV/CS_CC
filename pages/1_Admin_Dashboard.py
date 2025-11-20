@@ -1,10 +1,11 @@
 import streamlit as st
-import streamlit as st
 
+# ---- Access Control ----
 if 'role' not in st.session_state or st.session_state['role'] != 'admin':
     st.error("Unauthorized access. Please login as Admin.")
     st.stop()
 
+# ---- Admin Dashboard ----
 st.title("📊 Admin Dashboard")
 
 col1, col2, col3, col4 = st.columns(4)
