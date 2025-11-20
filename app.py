@@ -2,22 +2,16 @@ import streamlit as st
 
 st.set_page_config(page_title="CS / CC Portal", layout="wide")
 
-# ---- Initialize session state values ----
+# Initialize session state
 if "role" not in st.session_state:
     st.session_state.role = None
-
-# ---- If already logged in, redirect to correct homepage ----
-if st.session_state.role == "admin":
-    st.sidebar.success("Logged in as Admin")
-elif st.session_state.role == "staff":
-    st.sidebar.success("Logged in as Staff")
 
 st.title("📘 CS / CC Exam Duty Management Portal")
 
 col1, col2 = st.columns(2)
 
 # -------------------------
-# ADMIN LOGIN BOX
+# ADMIN LOGIN
 # -------------------------
 with col1:
     st.header("🔐 Admin Login")
@@ -28,13 +22,13 @@ with col1:
     if st.button("Login as Admin"):
         if admin_user == "admin" and admin_pass == "admin123":
             st.session_state.role = "admin"
-            st.success("Logged in as Admin.")
-            st.rerun()
+            st.success("Logging you in...")
+            st.switch_page("pages/1_Admin_Dashboard.py")
         else:
             st.error("Invalid admin login")
 
 # -------------------------
-# STAFF LOGIN BOX
+# STAFF LOGIN
 # -------------------------
 with col2:
     st.header("👨‍🏫 Staff Login")
@@ -45,8 +39,8 @@ with col2:
     if st.button("Login as Staff"):
         if staff_id.strip() != "" and staff_pass.strip() != "":
             st.session_state.role = "staff"
-            st.success("Logged in as Staff.")
-            st.rerun()
+            st.success("Logging you in...")
+            st.switch_page("pages/STAFF_Portal.py")
         else:
             st.error("Invalid staff login")
 
