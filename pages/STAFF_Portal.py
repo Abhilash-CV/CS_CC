@@ -8,7 +8,9 @@ from reportlab.pdfgen import canvas
 if "role" not in st.session_state or st.session_state.role != "staff":
     st.error("Unauthorized. Please login as Staff.")
     st.stop()
-
+if st.sidebar.button("🔓 Logout"):
+    st.session_state.role = None
+    st.rerun()
 # -------------------------------
 # HIDE SIDEBAR FOR STAFF
 # -------------------------------
