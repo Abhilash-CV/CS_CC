@@ -4,7 +4,9 @@ import streamlit as st
 if 'role' not in st.session_state or st.session_state['role'] != 'admin':
     st.error("Unauthorized access. Please login as Admin.")
     st.stop()
-
+if st.sidebar.button("🔓 Logout"):
+    st.session_state.role = None
+    st.rerun()
 # ---- Admin Dashboard ----
 st.title("📊 Admin Dashboard")
 
