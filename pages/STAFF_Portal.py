@@ -2,18 +2,16 @@ import streamlit as st
 from io import BytesIO
 from reportlab.pdfgen import canvas
 
-# -------------------------------
+# -----------------------------------------------------
 # STAFF-ONLY ACCESS CONTROL
-# -------------------------------
+# -----------------------------------------------------
 if "role" not in st.session_state or st.session_state.role != "staff":
     st.error("Unauthorized. Please login as Staff.")
     st.stop()
-if st.sidebar.button("🔓 Logout"):
-    st.session_state.role = None
-    st.rerun()
-# -------------------------------
+
+# -----------------------------------------------------
 # HIDE SIDEBAR FOR STAFF
-# -------------------------------
+# -----------------------------------------------------
 hide_sidebar = """
     <style>
         [data-testid="stSidebar"] {visibility: hidden !important; width: 0px !important;}
@@ -22,9 +20,32 @@ hide_sidebar = """
 """
 st.markdown(hide_sidebar, unsafe_allow_html=True)
 
-# -------------------------------
-# PDF GENERATOR
-# -------------------------------
+# -----------------------------------------------------
+# ALIGN LOGOUT BUTTON RIGHT (TOP RIGHT CORNER)
+# -----------------------------------------------------
+logout_css = """
+<style>
+.logout-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -50px;
+    margin-bottom: 20px;
+}
+</style>
+"""
+st.markdown(logout_css, unsafe_allow_html=True)
+
+# Wrapper row for logout button
+with st.container():
+    st.markdown("<div class='logout-btn'>", unsafe_allow_html=True)
+    if st.button("🔓 Logout", key="logout_staff"):
+        st.session_state.role = None
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# -----------------------------------------------------
+# PDF GENERATOR FUNCTION
+# -----------------------------------------------------
 def generate_memo(center_name, dates, staff_name, center_address):
     buffer = BytesIO()
     c = canvas.Canvas(buffer)
@@ -49,36 +70,47 @@ def generate_memo(center_name, dates, staff_name, center_address):
     buffer.seek(0)
     return buffer
 
-# -------------------------------
+# -----------------------------------------------------
 # STAFF PORTAL UI
-# -------------------------------
+# -----------------------------------------------------
 st.title("👨‍🏫 Staff Portal")
 
+# Tabs
 tab1, tab2, tab3 = st.tabs(["Profile", "Preferences", "Allotment Result"])
 
-# ---------------- PROFILE ----------------
+
+# -----------------------------------------------------
+# PROFILE TAB
+# -----------------------------------------------------
 with tab1:
     st.header("Personal Information")
+
+    # Replace with database values later
     st.write("**Name:** Dr. Anil Kumar")
     st.write("**Staff ID:** CS102")
     st.write("**Department:** Computer Science")
     st.write("**Staff Type:** Chief Superintendent (CS)")
     st.write("**Zone:** Zone 2 / St. Joseph’s College")
 
-# ---------------- PREFERENCES ----------------
+
+# -----------------------------------------------------
+# PREFERENCES TAB
+# -----------------------------------------------------
 with tab2:
     st.header("Exam Center Preferences")
 
-    centers = [
+    st.info("Choose your preferred exam centers (Up to 3).")
+
+    center_list = [
         "St. Mary’s College (C001)",
         "Loyola College (C002)",
         "Presidency College (C003)",
         "Govt Arts College (C004)"
     ]
 
-    pref1 = st.selectbox("Preference 1", centers)
-    pref2 = st.selectbox("Preference 2", centers)
-    pref3 = st.selectbox("Preference 3", centers)
+    pref1 = st.selectbox("Preference 1", center_list)
+    pref2 = st.selectbox("Preference 2", center_list)
+    pref3 = st.selectbox("Preference 3", center_list)
 
     remarks = st.text_area("Remarks (optional)")
 
@@ -88,27 +120,32 @@ with tab2:
     if st.button("Lock Preferences"):
         st.warning("Your preferences are locked. You cannot modify them now.")
 
-# ---------------- ALLOTMENT RESULT ----------------
+
+# -----------------------------------------------------
+# ALLOTMENT RESULT TAB
+# -----------------------------------------------------
 with tab3:
     st.header("Allotment Result")
 
-    alloted_center = "St. Mary’s College"
+    # Sample values (replace with real DB data)
+    center_name = "St. Mary’s College"
     center_code = "C001"
     center_address = "Cathedral Road, Chennai"
     duty_dates = "12–15 March 2025"
     staff_name = "Dr. Anil Kumar"
 
-    st.success(f"You have been allotted to **{alloted_center} ({center_code})**")
+    st.success(f"You have been allotted to **{center_name} ({center_code})**")
 
     st.write(f"**Center Address:** {center_address}")
     st.write(f"**Duty Dates:** {duty_dates}")
     st.write("**Reporting Time:** 8:00 AM")
 
-    pdf_file = generate_memo(alloted_center, duty_dates, staff_name, center_address)
+    # Generate Memo PDF
+    memo_pdf = generate_memo(center_name, duty_dates, staff_name, center_address)
 
     st.download_button(
         label="📄 Download Duty Memo (PDF)",
-        data=pdf_file,
+        data=memo_pdf,
         file_name="duty_memo.pdf",
         mime="application/pdf"
     )
