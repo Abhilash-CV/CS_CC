@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
-
+if 'role' not in st.session_state or st.session_state['role'] != 'admin':
+    st.error("Unauthorized access. Please login as Admin.")
+    st.stop()
 st.title("🗂️ View Staff Preferences")
 
 df = pd.DataFrame({
