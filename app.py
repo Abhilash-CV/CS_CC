@@ -2,20 +2,14 @@ import streamlit as st
 
 st.set_page_config(page_title="CS / CC Portal", layout="wide")
 
+# ---------------------------------------------------------
 # Initialize session state
+# ---------------------------------------------------------
 if "role" not in st.session_state:
     st.session_state.role = None
 
 # ---------------------------------------------------------
-# Show Logout button BEFORE redirect
-# ---------------------------------------------------------
-if st.session_state.role in ["admin", "staff"]:
-    if st.sidebar.button("🔓 Logout"):
-        st.session_state.role = None
-        st.rerun()  # safer for Streamlit Cloud
-
-# ---------------------------------------------------------
-# Hide sidebar completely on landing page (before login)
+# Hide sidebar completely on landing page (role = None)
 # ---------------------------------------------------------
 if st.session_state.role is None:
     hide_sidebar_style = """
@@ -27,6 +21,14 @@ if st.session_state.role is None:
     st.markdown(hide_sidebar_style, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
+# Show Logout button (AFTER sidebar hide logic)
+# ---------------------------------------------------------
+if st.session_state.role in ["admin", "staff"]:
+    if st.sidebar.button("🔓 Logout"):
+        st.session_state.role = None
+        st.rerun()  # Ensures sidebar hides and landing page loads
+
+# ---------------------------------------------------------
 # Auto-redirect if already logged in
 # ---------------------------------------------------------
 if st.session_state.role == "admin":
@@ -36,7 +38,7 @@ if st.session_state.role == "staff":
     st.switch_page("pages/STAFF_Portal.py")
 
 # ---------------------------------------------------------
-# LOGIN SCREEN
+# LOGIN SCREEN (Landing Page)
 # ---------------------------------------------------------
 st.title("📘 CS / CC Exam Duty Management Portal")
 
