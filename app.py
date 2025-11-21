@@ -5,11 +5,7 @@ st.set_page_config(page_title="CS / CC Portal", layout="wide")
 # Initialize session state
 if "role" not in st.session_state:
     st.session_state.role = None
-# Show Logout button if logged in
-if st.session_state.role in ["admin", "staff"]:
-    if st.sidebar.button("🔓 Logout"):
-        st.session_state.role = None
-        st.experimental_rerun()  # or st.rerun() in newer Streamlit
+
 
 # ---------------------------------------------------------
 # Hide sidebar completely on landing page (before login)
@@ -31,7 +27,11 @@ if st.session_state.role == "admin":
 
 if st.session_state.role == "staff":
     st.switch_page("pages/STAFF_Portal.py")
-
+# Show Logout button if logged in
+if st.session_state.role in ["admin", "staff"]:
+    if st.sidebar.button("🔓 Logout"):
+        st.session_state.role = None
+        st.experimental_rerun()  # or st.rerun() in newer Streamlit
 # ---------------------------------------------------------
 # LOGIN SCREEN
 # ---------------------------------------------------------
