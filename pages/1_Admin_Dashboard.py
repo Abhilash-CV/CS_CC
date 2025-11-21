@@ -10,7 +10,7 @@ st.title("📊 Admin Dashboard")
 
 col1, col2, col3, col4 = st.columns(4)
 
-col1.metric("Active Session", "March 2025 UG")
+col1.metric("Active Session", "March 2025")
 col2.metric("Total Staff", 240)
 col3.metric("Total Centers", 65)
 col4.metric("Preferences Submitted", "220 / 240")
