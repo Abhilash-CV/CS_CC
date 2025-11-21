@@ -6,6 +6,18 @@ st.set_page_config(page_title="CS / CC Portal", layout="wide")
 if "role" not in st.session_state:
     st.session_state.role = None
 
+# -------------------------
+# AUTO-REDIRECT IF LOGGED IN
+# -------------------------
+if st.session_state.role == "admin":
+    st.switch_page("pages/1_Admin_Dashboard.py")
+
+if st.session_state.role == "staff":
+    st.switch_page("pages/STAFF_Portal.py")
+
+# -------------------------
+# LOGIN SCREEN
+# -------------------------
 st.title("📘 CS / CC Exam Duty Management Portal")
 
 col1, col2 = st.columns(2)
