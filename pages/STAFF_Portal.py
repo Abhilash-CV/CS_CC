@@ -99,38 +99,75 @@ with tab1:
 with tab2:
     st.markdown("## Exam Center Preferences")
 
-    # Layout: Two cards side-by-side
+    # ------------------------------
+    # Sample Data (Replace with DB later)
+    # ------------------------------
+    districts = {
+        "Chennai": [
+            "St. Mary’s College (C001)",
+            "Loyola College (C002)",
+            "Presidency College (C003)"
+        ],
+        "Coimbatore": [
+            "Government College of Tech (C101)",
+            "PSG Arts College (C102)"
+        ],
+        "Madurai": [
+            "American College (C201)",
+            "Thiagarajar College (C202)"
+        ]
+    }
+
+    dist_names = list(districts.keys())
+
+    # ------------------------------
+    # Two Cards Layout
+    # ------------------------------
     col_form, col_saved = st.columns([2, 1], gap="large")
 
-    # -----------------------------
-    # LEFT CARD - Preference Form
-    # -----------------------------
+    # -------------------------------------------------
+    # LEFT CARD (FORM)
+    # -------------------------------------------------
     with col_form:
         st.markdown("""
             <div style="
                 background-color: #ffffff;
                 padding: 25px;
-                border-radius: 15px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                border-radius: 16px;
+                box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
             ">
         """, unsafe_allow_html=True)
 
         st.info("Choose your preferred exam centers (Up to 3).")
 
-        center_list = [
-            "St. Mary’s College (C001)",
-            "Loyola College (C002)",
-            "Presidency College (C003)",
-            "Govt Arts College (C004)"
-        ]
+        # -------------------------------------------------
+        # Preference 1
+        # -------------------------------------------------
+        st.subheader("Preference 1")
 
-        pref1 = st.selectbox("Preference 1", center_list)
-        pref2 = st.selectbox("Preference 2", center_list)
-        pref3 = st.selectbox("Preference 3", center_list)
+        pref1_dist = st.selectbox("Filter by District", dist_names, key="pref1_dist")
+        pref1_center = st.selectbox("— Select —", districts[pref1_dist], key="pref1_center")
 
-        remarks = st.text_area("Remarks (optional)", placeholder="Enter any notes...")
+        # -------------------------------------------------
+        # Preference 2
+        # -------------------------------------------------
+        st.subheader("Preference 2")
 
-        c1, c2 = st.columns([1,1])
+        pref2_dist = st.selectbox("Filter by District", dist_names, key="pref2_dist")
+        pref2_center = st.selectbox("— Select —", districts[pref2_dist], key="pref2_center")
+
+        # -------------------------------------------------
+        # Preference 3
+        # -------------------------------------------------
+        st.subheader("Preference 3")
+
+        pref3_dist = st.selectbox("Filter by District", dist_names, key="pref3_dist")
+        pref3_center = st.selectbox("— Select —", districts[pref3_dist], key="pref3_center")
+
+        # -------------------------------------------------
+        # Save + Lock Buttons
+        # -------------------------------------------------
+        c1, c2 = st.columns([1, 1])
 
         with c1:
             save_clicked = st.button("💾 Save Preferences", use_container_width=True)
@@ -140,26 +177,31 @@ with tab2:
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-        # Save logic
+        # -------------------------------------------------
+        # Save Logic
+        # -------------------------------------------------
         if save_clicked:
-            st.session_state.saved_preferences = [pref1, pref2, pref3]
-            st.session_state.saved_remarks = remarks
+            st.session_state.saved_preferences = [
+                pref1_center,
+                pref2_center,
+                pref3_center
+            ]
             st.success("Preferences saved successfully!")
 
         if lock_clicked:
             st.session_state.locked = True
             st.warning("Your preferences are locked. You cannot modify them now.")
 
-    # -----------------------------
-    # RIGHT CARD - Saved Preferences
-    # -----------------------------
+    # -------------------------------------------------
+    # RIGHT CARD (SAVED PREFERENCES)
+    # -------------------------------------------------
     with col_saved:
         st.markdown("""
             <div style="
                 background-color: #ffffff;
                 padding: 25px;
-                border-radius: 15px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                border-radius: 16px;
+                box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
             ">
         """, unsafe_allow_html=True)
 
@@ -167,14 +209,13 @@ with tab2:
 
         if "saved_preferences" in st.session_state:
             st.success("Preferences saved successfully!")
-
-            for i, p in enumerate(st.session_state.saved_preferences, start=1):
+            for i, p in enumerate(st.session_state.saved_preferences, 1):
                 st.write(f"**{i}. {p}**")
-
         else:
             st.info("No preferences saved yet.")
 
         st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 
