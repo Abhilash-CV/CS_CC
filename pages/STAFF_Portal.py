@@ -97,28 +97,85 @@ with tab1:
 # PREFERENCES TAB
 # -----------------------------------------------------
 with tab2:
-    st.header("Exam Center Preferences")
+    st.markdown("## Exam Center Preferences")
 
-    st.info("Choose your preferred exam centers (Up to 3).")
+    # Layout: Two cards side-by-side
+    col_form, col_saved = st.columns([2, 1], gap="large")
 
-    center_list = [
-        "St. Mary’s College (C001)",
-        "Loyola College (C002)",
-        "Presidency College (C003)",
-        "Govt Arts College (C004)"
-    ]
+    # -----------------------------
+    # LEFT CARD - Preference Form
+    # -----------------------------
+    with col_form:
+        st.markdown("""
+            <div style="
+                background-color: #ffffff;
+                padding: 25px;
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            ">
+        """, unsafe_allow_html=True)
 
-    pref1 = st.selectbox("Preference 1", center_list)
-    pref2 = st.selectbox("Preference 2", center_list)
-    pref3 = st.selectbox("Preference 3", center_list)
+        st.info("Choose your preferred exam centers (Up to 3).")
 
-    remarks = st.text_area("Remarks (optional)")
+        center_list = [
+            "St. Mary’s College (C001)",
+            "Loyola College (C002)",
+            "Presidency College (C003)",
+            "Govt Arts College (C004)"
+        ]
 
-    if st.button("Save Preferences"):
-        st.success("Preferences saved successfully!")
+        pref1 = st.selectbox("Preference 1", center_list)
+        pref2 = st.selectbox("Preference 2", center_list)
+        pref3 = st.selectbox("Preference 3", center_list)
 
-    if st.button("Lock Preferences"):
-        st.warning("Your preferences are locked. You cannot modify them now.")
+        remarks = st.text_area("Remarks (optional)", placeholder="Enter any notes...")
+
+        c1, c2 = st.columns([1,1])
+
+        with c1:
+            save_clicked = st.button("💾 Save Preferences", use_container_width=True)
+
+        with c2:
+            lock_clicked = st.button("🔒 Lock Preferences", use_container_width=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+        # Save logic
+        if save_clicked:
+            st.session_state.saved_preferences = [pref1, pref2, pref3]
+            st.session_state.saved_remarks = remarks
+            st.success("Preferences saved successfully!")
+
+        if lock_clicked:
+            st.session_state.locked = True
+            st.warning("Your preferences are locked. You cannot modify them now.")
+
+    # -----------------------------
+    # RIGHT CARD - Saved Preferences
+    # -----------------------------
+    with col_saved:
+        st.markdown("""
+            <div style="
+                background-color: #ffffff;
+                padding: 25px;
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            ">
+        """, unsafe_allow_html=True)
+
+        st.markdown("### Saved Preferences")
+
+        if "saved_preferences" in st.session_state:
+            st.success("Preferences saved successfully!")
+
+            for i, p in enumerate(st.session_state.saved_preferences, start=1):
+                st.write(f"**{i}. {p}**")
+
+        else:
+            st.info("No preferences saved yet.")
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # -----------------------------------------------------
